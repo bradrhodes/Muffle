@@ -17,15 +17,29 @@ namespace MuteButton
         private readonly Lazy<SerialPort> _lazyArduinoPort;
         private SerialPort ArduinoPort => _lazyArduinoPort.Value;
 
+        private bool _allowVisible = false;
+
         public Form1()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = MuteButton.Properties.Resources.microphone_black;
             _lazyArduinoPort = new Lazy<SerialPort>(() => new SerialPort());
 
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;
             timer1.Enabled = true;
+        }
+
+        protected override void SetVisibleCore(bool value)
+        {
+            if(!_allowVisible)
+            {
+                value = false;
+                if(!this.IsHandleCreated) CreateHandle();
+            }
+
+            base.SetVisibleCore(value);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -40,12 +54,13 @@ namespace MuteButton
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-
+            ToggleMuteStatus();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckMuteStatus();
+            Hide();
         }
 
         private void SetupSerialPort()
@@ -84,6 +99,40 @@ namespace MuteButton
 
             listBox1.Items.Add(message);
             listBox1.TopIndex = listBox1.Items.Count - 1;
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+                notifyIcon1.Visible = true;
+            }
+        }
+
+        private void MuteMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAudioDevice.SetRecordingMute(true);
+            CheckMuteStatus();
+        }
+
+        private void UnmuteMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAudioDevice.SetRecordingMute(false);
+            CheckMuteStatus();
+        }
+
+        private void DebugMenuItem_Click(object sender, EventArgs e)
+        {
+            _allowVisible = true;
+            Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void ExitMenuItem_Click(object sender, EventArgs e)
+        {
+            SetAudioDevice.SetRecordingMute(false);
+            Application.Exit();
         }
     }
 }

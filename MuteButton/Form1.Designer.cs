@@ -33,8 +33,16 @@ namespace MuteButton
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UnmuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.DebugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -59,9 +67,60 @@ namespace MuteButton
             // 
             // notifyIcon1
             // 
-            this.notifyIcon1.Text = "d";
+            this.notifyIcon1.BalloonTipText = "Double Click To Toggle Mute";
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MuteMenuItem,
+            this.UnmuteMenuItem,
+            this.toolStripSeparator1,
+            this.DebugMenuItem,
+            this.toolStripSeparator2,
+            this.ExitMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(118, 104);
+            // 
+            // MuteMenuItem
+            // 
+            this.MuteMenuItem.Name = "MuteMenuItem";
+            this.MuteMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.MuteMenuItem.Text = "Mute";
+            this.MuteMenuItem.Click += new System.EventHandler(this.MuteMenuItem_Click);
+            // 
+            // UnmuteMenuItem
+            // 
+            this.UnmuteMenuItem.Name = "UnmuteMenuItem";
+            this.UnmuteMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.UnmuteMenuItem.Text = "Unmute";
+            this.UnmuteMenuItem.Click += new System.EventHandler(this.UnmuteMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(114, 6);
+            // 
+            // DebugMenuItem
+            // 
+            this.DebugMenuItem.Name = "DebugMenuItem";
+            this.DebugMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.DebugMenuItem.Text = "Debug";
+            this.DebugMenuItem.Click += new System.EventHandler(this.DebugMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(114, 6);
+            // 
+            // ExitMenuItem
+            // 
+            this.ExitMenuItem.Name = "ExitMenuItem";
+            this.ExitMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.ExitMenuItem.Text = "Exit";
+            this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 
             // listBox1
             // 
@@ -81,8 +140,10 @@ namespace MuteButton
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Mic Muter";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -93,6 +154,13 @@ namespace MuteButton
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem MuteMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem UnmuteMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem DebugMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem ExitMenuItem;
     }
 }
 
