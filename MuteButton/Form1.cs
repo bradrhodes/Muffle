@@ -14,8 +14,6 @@ namespace MuteButton
 {
     public partial class Form1 : Form
     {
-        private readonly Lazy<SerialPort> _lazyArduinoPort;
-        private SerialPort ArduinoPort => _lazyArduinoPort.Value;
 
         private bool _allowVisible = false;
 
@@ -24,7 +22,6 @@ namespace MuteButton
             InitializeComponent();
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = MuteButton.Properties.Resources.microphone_black;
-            _lazyArduinoPort = new Lazy<SerialPort>(() => new SerialPort());
 
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;
@@ -63,10 +60,6 @@ namespace MuteButton
             Hide();
         }
 
-        private void SetupSerialPort()
-        {
-
-        }
 
         private void ToggleMuteStatus()
         {
@@ -133,6 +126,11 @@ namespace MuteButton
         {
             SetAudioDevice.SetRecordingMute(false);
             Application.Exit();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //SetupSerialPort();
         }
     }
 }
