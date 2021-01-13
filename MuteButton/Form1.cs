@@ -132,5 +132,43 @@ namespace MuteButton
         {
             //SetupSerialPort();
         }
+
+        private void ConnectButtonMenuItem_Click(object sender, EventArgs e)
+        {
+            ConnectButton();
+        }
+
+        private void ConnectButton()
+        {
+            using(var connectButtonForm = new ConnectButtonForm())
+            {
+                if(connectButtonForm.ShowDialog() == DialogResult.OK)
+                {
+                    LogMessage($"Arduino port discovered: {connectButtonForm.PortName}");
+
+                    // Save the port and make the connection
+
+                    return;
+                }
+
+                LogMessage($"Arduino port not discovered.");
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ConnectButton();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(e.CloseReason != CloseReason.ApplicationExitCall)
+            {
+                e.Cancel = true;
+                Hide();
+                notifyIcon1.Visible = true;
+                return;
+            }
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace MuteButton
             return Port.IsOpen;
         }
 
-        public IEnumerable<string> GetAvailablePorts()
+        public static IEnumerable<string> GetAvailablePorts()
         {
             // Scan for available ports
             return SerialPort.GetPortNames();

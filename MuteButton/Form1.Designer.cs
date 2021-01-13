@@ -37,12 +37,15 @@ namespace MuteButton
             this.MuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UnmuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ConnectButtonMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.DebugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,47 +82,61 @@ namespace MuteButton
             this.MuteMenuItem,
             this.UnmuteMenuItem,
             this.toolStripSeparator1,
+            this.ConnectButtonMenuItem,
+            this.toolStripSeparator3,
             this.DebugMenuItem,
             this.toolStripSeparator2,
             this.ExitMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(118, 104);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(159, 132);
             // 
             // MuteMenuItem
             // 
             this.MuteMenuItem.Name = "MuteMenuItem";
-            this.MuteMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.MuteMenuItem.Size = new System.Drawing.Size(158, 22);
             this.MuteMenuItem.Text = "Mute";
             this.MuteMenuItem.Click += new System.EventHandler(this.MuteMenuItem_Click);
             // 
             // UnmuteMenuItem
             // 
             this.UnmuteMenuItem.Name = "UnmuteMenuItem";
-            this.UnmuteMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.UnmuteMenuItem.Size = new System.Drawing.Size(158, 22);
             this.UnmuteMenuItem.Text = "Unmute";
             this.UnmuteMenuItem.Click += new System.EventHandler(this.UnmuteMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(114, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
+            // 
+            // ConnectButtonMenuItem
+            // 
+            this.ConnectButtonMenuItem.Name = "ConnectButtonMenuItem";
+            this.ConnectButtonMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ConnectButtonMenuItem.Text = "Connect Button";
+            this.ConnectButtonMenuItem.Click += new System.EventHandler(this.ConnectButtonMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(155, 6);
             // 
             // DebugMenuItem
             // 
             this.DebugMenuItem.Name = "DebugMenuItem";
-            this.DebugMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.DebugMenuItem.Size = new System.Drawing.Size(158, 22);
             this.DebugMenuItem.Text = "Debug";
             this.DebugMenuItem.Click += new System.EventHandler(this.DebugMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(114, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(155, 6);
             // 
             // ExitMenuItem
             // 
             this.ExitMenuItem.Name = "ExitMenuItem";
-            this.ExitMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.ExitMenuItem.Size = new System.Drawing.Size(158, 22);
             this.ExitMenuItem.Text = "Exit";
             this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 
@@ -136,23 +153,37 @@ namespace MuteButton
             // 
             this.button3.Location = new System.Drawing.Point(100, 245);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(132, 23);
             this.button3.TabIndex = 4;
             this.button3.Text = "List Ports";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(100, 291);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(132, 23);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Connect Button";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Mic Muter";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.contextMenuStrip1.ResumeLayout(false);
@@ -174,6 +205,9 @@ namespace MuteButton
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem ExitMenuItem;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ToolStripMenuItem ConnectButtonMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.Button button4;
     }
 }
 
