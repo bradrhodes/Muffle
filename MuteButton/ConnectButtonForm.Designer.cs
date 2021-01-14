@@ -44,9 +44,9 @@ namespace MuteButton
             // 
             // buttonPair
             // 
-            this.buttonPair.Location = new System.Drawing.Point(130, 39);
+            this.buttonPair.Location = new System.Drawing.Point(133, 43);
             this.buttonPair.Name = "buttonPair";
-            this.buttonPair.Size = new System.Drawing.Size(111, 52);
+            this.buttonPair.Size = new System.Drawing.Size(86, 28);
             this.buttonPair.TabIndex = 1;
             this.buttonPair.Text = "Pair";
             this.buttonPair.UseVisualStyleBackColor = true;

@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
 
@@ -16,16 +8,26 @@ namespace MuteButton
     {
 
         private bool _allowVisible = false;
+        private Lazy<Settings> _lazySettings;
+        private Settings Settings => _lazySettings.Value;
+
+        private readonly Arduino _arduino;
 
         public Form1()
         {
             InitializeComponent();
+
+            _lazySettings = new Lazy<Settings>(() => Settings.Initialize());
+
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = MuteButton.Properties.Resources.microphone_black;
 
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;
             timer1.Enabled = true;
+
+            _arduino = new Arduino(Settings.AppSettings);
+            _arduino.ProcessMessage += ProcessArduinoMessages;
         }
 
         protected override void SetVisibleCore(bool value)
@@ -73,11 +75,13 @@ namespace MuteButton
             {
                 notifyIcon1.Icon = Properties.Resources.microphone_red;
                 LogMessage("Mic status: Muted");
+                _arduino.SendMessage("mutestatetrue");
                 return;
             }
 
             notifyIcon1.Icon = Properties.Resources.microphone_green;
             LogMessage("Mic status: Not Muted");
+            _arduino.SendMessage("mutestatefalse");
         }
 
         private void CheckMuteStatusEventHandler(object sender, EventArgs e)
@@ -168,6 +172,18 @@ namespace MuteButton
                 Hide();
                 notifyIcon1.Visible = true;
                 return;
+            }
+        }
+
+        private void ProcessArduinoMessages(string message)
+        {
+            if(string.Equals(message, "togglemutestate"))
+            {
+                ToggleMuteStatus();
+            }
+            else if(string.Equals(message, "getcurrentmutestate"))
+            {
+                CheckMuteStatus();
             }
         }
     }

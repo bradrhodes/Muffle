@@ -5,22 +5,42 @@ namespace MuteButton
 {
     public record AppSettings
     {
-        public Port Port { get; }
+        public Port Port { get; init; }
 
         public AppSettings(string port) => (Port) = Port;
     }
 
     public record Port
     {
-        public string PortName { get; }
-        public int BaudRate { get; }
+        public string PortName { get; init; }
+        public int BaudRate { get; init; }
 
         public Port(string portName, int baudRate) => (PortName, BaudRate) = (portName, baudRate);
     }
 
-    public static class Settings
+    public class Settings
     {
-        public static AppSettings Load()
+        private Settings(AppSettings appSettings)
+        {
+            AppSettings = appSettings;
+        }
+
+        public AppSettings AppSettings { get; private set; }
+
+        public void UpdatePort(string portName)
+        {
+            var newSettings = AppSettings with { Port = AppSettings.Port with { PortName = portName } };
+            AppSettings = newSettings;
+            Save();
+        }
+
+        public static Settings Initialize()
+        {
+            var appSettings = Load();
+            return new Settings(appSettings);
+        }
+
+        private static AppSettings Load()
         {
             if(File.Exists("settings.json"))
             {
@@ -31,9 +51,9 @@ namespace MuteButton
             return null;
         }
 
-        public static void Save(this AppSettings settings)
+        private void Save()
         {
-            var jsonString = JsonSerializer.Serialize(settings);
+            var jsonString = JsonSerializer.Serialize(AppSettings);
             File.WriteAllText("settings.json", jsonString);
         }
     }

@@ -49,7 +49,7 @@ namespace MuteButton
 
         private void buttonPair_Click(object sender, EventArgs e)
         {
-            buttonPair.Enabled = false;
+
             _initialComPorts = Arduino.GetAvailablePorts();
             label1.Text = "Please plug in the button now.";
 
