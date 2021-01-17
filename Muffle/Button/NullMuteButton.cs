@@ -1,6 +1,6 @@
 ﻿namespace Muffle.Button
 {
-    public class NullPhysicalB : PhysicalB
+    public class NullMuteButton : MuteButton
     {
         public override ArduinoResult SetMuteStateTrue()
         {

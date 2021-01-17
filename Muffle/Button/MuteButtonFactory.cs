@@ -1,11 +1,11 @@
 ﻿namespace Muffle.Button
 {
-    public class ButtonFactory
+    public class MuteButtonFactory
     {
-        public PhysicalB Create(ArduinoSettings settings)
+        public MuteButton Create(ArduinoSettings settings)
         {
             if (settings == null || string.IsNullOrEmpty(settings.Port.PortName) || settings.Port.BaudRate == default)
-                return new NullPhysicalB();
+                return new NullMuteButton();
 
             return new ArduinoButton(settings);
         }

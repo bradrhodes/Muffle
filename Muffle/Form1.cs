@@ -13,12 +13,13 @@ namespace Muffle
         private bool _buttonWarningDisabled = false;
 
         private Settings _settings;
-        private readonly ButtonFactory _buttonFactory;
+        private readonly MuteButtonFactory _muteButtonFactory;
+        private MuteButton _muteButton;
 
         public Form1()
         {
             InitializeComponent();
-            _buttonFactory = new ButtonFactory();
+            _muteButtonFactory = new MuteButtonFactory();
 
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = Muffle.Properties.Resources.microphone_black;
@@ -34,7 +35,7 @@ namespace Muffle
             Hide();
 
             InitializeSettings();
-            InitializeArduino();
+            InitializeButton();
         }
 
         protected override void SetVisibleCore(bool value)
@@ -68,11 +69,11 @@ namespace Muffle
             _settings = Settings.Initialize();
             if(_settings == null)
             {
-                PopTooltip();
+                PopButtonNotConnectedTooltip();
             }
         }
 
-        private void PopTooltip()
+        private void PopButtonNotConnectedTooltip()
         {
             notifyIcon1.BalloonTipTitle = "Button Not Connected";
             notifyIcon1.BalloonTipText = "Click here to connect.";
@@ -82,16 +83,15 @@ namespace Muffle
             notifyIcon1.ShowBalloonTip((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
         }
 
-        private void InitializeArduino()
+        private void InitializeButton()
         {
-            if(_settings == null || _settings?.ArduinoSettings == null)
-            {
-                PopTooltip();
-                return;
-            }
+            _muteButton = _muteButtonFactory.Create(_settings.ArduinoSettings);
+            _muteButton.ProcessMessage += ProcessMuteButtonMessages;
 
-            _arduino = new Arduino(_settings.ArduinoSettings);
-            _arduino.ProcessMessage += ProcessArduinoMessages;
+            if (_muteButton is NullMuteButton)
+            {
+                PopButtonNotConnectedTooltip();
+            }
         }
 
         private void ToggleMuteStatus()
@@ -106,13 +106,13 @@ namespace Muffle
             {
                 notifyIcon1.Icon = Properties.Resources.microphone_red;
                 LogMessage("Mic status: Muted");
-                _arduino.SendMessage("mutestatetrue");
+                _muteButton.SetMuteStateTrue();
                 return;
             }
 
             notifyIcon1.Icon = Properties.Resources.microphone_green;
             LogMessage("Mic status: Not Muted");
-            _arduino.SendMessage("mutestatefalse");
+            _muteButton.SetMuteStateFalse();
         }
 
         private void CheckMuteStatusEventHandler(object sender, EventArgs e)
@@ -206,7 +206,7 @@ namespace Muffle
             }
         }
 
-        private void ProcessArduinoMessages(string message)
+        private void ProcessMuteButtonMessages(string message)
         {
             if(string.Equals(message, "togglemutestate"))
             {

@@ -4,7 +4,7 @@ using System.IO.Ports;
 
 namespace Muffle.Button
 {
-    public class ArduinoButton : PhysicalB
+    public class ArduinoButton : MuteButton
     {
         private readonly Lazy<SerialPort> _lazyPort;
         private readonly ArduinoSettings _settings;
