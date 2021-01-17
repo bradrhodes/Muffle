@@ -4,7 +4,7 @@ using System.IO.Ports;
 
 namespace MuteButton.Button
 {
-    public class ArduinoButton : Button
+    public class ArduinoButton : MuteButton
     {
         private readonly Lazy<SerialPort> _lazyPort;
         private readonly ArduinoSettings _settings;
@@ -35,7 +35,7 @@ namespace MuteButton.Button
             });
         }
 
-        public bool IsConnected() 
+        public override bool IsConnected() 
         {
             return Port.IsOpen;
         }
@@ -86,7 +86,7 @@ namespace MuteButton.Button
             string s;
             s = sp.ReadLine();
 
-            ProcessMessage?.Invoke(s);
+            OnProcessMessage(s);
         }
 
         private ArduinoResult ValidateConnection()

@@ -1,6 +1,6 @@
 ﻿namespace MuteButton.Button
 {
-    public abstract class Button
+    public abstract class MuteButton
     {
         public abstract ArduinoResult SetMuteStateTrue();
 

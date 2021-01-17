@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace MuteButton
 
         private void CheckForArduino(object sender, EventArgs e)
         {
-            var currentComPorts = Arduino.GetAvailablePorts();
+            var currentComPorts = SerialPort.GetPortNames();
 
             var diff = currentComPorts.Except(_initialComPorts).SingleOrDefault();
 
@@ -50,7 +51,7 @@ namespace MuteButton
         private void buttonPair_Click(object sender, EventArgs e)
         {
 
-            _initialComPorts = Arduino.GetAvailablePorts();
+            _initialComPorts = SerialPort.GetPortNames();
             label1.Text = "Please plug in the button now.";
 
             _checkForAruino.Enabled = true;

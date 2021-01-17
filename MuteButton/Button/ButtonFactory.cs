@@ -2,10 +2,10 @@
 {
     public class ButtonFactory
     {
-        public Button Create(ArduinoSettings settings)
+        public MuteButton Create(ArduinoSettings settings)
         {
             if (settings == null || string.IsNullOrEmpty(settings.Port.PortName) || settings.Port.BaudRate == default)
-                return new NullButton();
+                return new NullMuteButton();
 
             return new ArduinoButton(settings);
         }
