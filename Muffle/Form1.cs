@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
-using MuteButton.Button;
+using Muffle.Button;
 
-namespace MuteButton
+namespace Muffle
 {
     public partial class Form1 : Form
     {
@@ -21,7 +21,7 @@ namespace MuteButton
             _buttonFactory = new ButtonFactory();
 
             this.Icon = Properties.Resources.microphone_black;
-            notifyIcon1.Icon = MuteButton.Properties.Resources.microphone_black;
+            notifyIcon1.Icon = Muffle.Properties.Resources.microphone_black;
 
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;

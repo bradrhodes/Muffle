@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 
-namespace MuteButton.Button
+namespace Muffle.Button
 {
     public class ArduinoButton : PhysicalB
     {

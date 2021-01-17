@@ -1,4 +1,4 @@
-﻿namespace MuteButton.Button
+﻿namespace Muffle.Button
 {
     public abstract class PhysicalB
     {

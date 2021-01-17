@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MuteButton.Button
+namespace Muffle.Button
 {
     public class UnknownArduinoResultException : Exception
     {

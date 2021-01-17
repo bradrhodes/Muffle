@@ -1,5 +1,5 @@
 ﻿
-namespace MuteButton
+namespace Muffle
 {
     partial class ConnectButtonForm
     {
