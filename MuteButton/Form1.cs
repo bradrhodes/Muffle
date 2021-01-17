@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
+using MuteButton.Button;
 
 namespace MuteButton
 {
@@ -8,16 +10,15 @@ namespace MuteButton
     {
 
         private bool _allowVisible = false;
-        private Lazy<Settings> _lazySettings;
-        private Settings Settings => _lazySettings.Value;
+        private bool _buttonWarningDisabled = false;
 
-        private readonly Arduino _arduino;
+        private Settings _settings;
+        private readonly ButtonFactory _buttonFactory;
 
         public Form1()
         {
             InitializeComponent();
-
-            _lazySettings = new Lazy<Settings>(() => Settings.Initialize());
+            _buttonFactory = new ButtonFactory();
 
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = MuteButton.Properties.Resources.microphone_black;
@@ -25,9 +26,15 @@ namespace MuteButton
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;
             timer1.Enabled = true;
+        }
 
-            _arduino = new Arduino(Settings.AppSettings);
-            _arduino.ProcessMessage += ProcessArduinoMessages;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            CheckMuteStatus();
+            Hide();
+
+            InitializeSettings();
+            InitializeArduino();
         }
 
         protected override void SetVisibleCore(bool value)
@@ -56,12 +63,36 @@ namespace MuteButton
             ToggleMuteStatus();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void InitializeSettings()
         {
-            CheckMuteStatus();
-            Hide();
+            _settings = Settings.Initialize();
+            if(_settings == null)
+            {
+                PopTooltip();
+            }
         }
 
+        private void PopTooltip()
+        {
+            notifyIcon1.BalloonTipTitle = "Button Not Connected";
+            notifyIcon1.BalloonTipText = "Click here to connect.";
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Warning;
+
+            notifyIcon1.Visible = true;
+            notifyIcon1.ShowBalloonTip((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+        }
+
+        private void InitializeArduino()
+        {
+            if(_settings == null || _settings?.ArduinoSettings == null)
+            {
+                PopTooltip();
+                return;
+            }
+
+            _arduino = new Arduino(_settings.ArduinoSettings);
+            _arduino.ProcessMessage += ProcessArduinoMessages;
+        }
 
         private void ToggleMuteStatus()
         {

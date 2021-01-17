@@ -3,11 +3,11 @@ using System.Text.Json;
 
 namespace MuteButton
 {
-    public record AppSettings
+    public record ArduinoSettings
     {
         public Port Port { get; init; }
 
-        public AppSettings(string port) => (Port) = Port;
+        public ArduinoSettings(string port) => (Port) = Port;
     }
 
     public record Port
@@ -20,17 +20,17 @@ namespace MuteButton
 
     public class Settings
     {
-        private Settings(AppSettings appSettings)
+        private Settings(ArduinoSettings appSettings)
         {
-            AppSettings = appSettings;
+            ArduinoSettings = appSettings;
         }
 
-        public AppSettings AppSettings { get; private set; }
+        public ArduinoSettings ArduinoSettings { get; private set; }
 
         public void UpdatePort(string portName)
         {
-            var newSettings = AppSettings with { Port = AppSettings.Port with { PortName = portName } };
-            AppSettings = newSettings;
+            var newSettings = ArduinoSettings with { Port = ArduinoSettings.Port with { PortName = portName } };
+            ArduinoSettings = newSettings;
             Save();
         }
 
@@ -40,12 +40,12 @@ namespace MuteButton
             return new Settings(appSettings);
         }
 
-        private static AppSettings Load()
+        private static ArduinoSettings Load()
         {
             if(File.Exists("settings.json"))
             {
                 var jsonString = File.ReadAllText("settings.json");
-                return JsonSerializer.Deserialize<AppSettings>(jsonString);
+                return JsonSerializer.Deserialize<ArduinoSettings>(jsonString);
             }
 
             return null;
@@ -53,7 +53,7 @@ namespace MuteButton
 
         private void Save()
         {
-            var jsonString = JsonSerializer.Serialize(AppSettings);
+            var jsonString = JsonSerializer.Serialize(ArduinoSettings);
             File.WriteAllText("settings.json", jsonString);
         }
     }
