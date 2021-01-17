@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Drawing;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
@@ -24,18 +25,20 @@ namespace Muffle
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = Muffle.Properties.Resources.microphone_black;
 
+            InitializeSettings();
+            InitializeButton();
+            CheckMuteStatus();
+
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;
             timer1.Enabled = true;
         }
 
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            CheckMuteStatus();
-            Hide();
+            // Hide();
 
-            InitializeSettings();
-            InitializeButton();
         }
 
         protected override void SetVisibleCore(bool value)
@@ -67,17 +70,17 @@ namespace Muffle
         private void InitializeSettings()
         {
             _settings = Settings.Initialize();
-            if(_settings == null)
-            {
-                PopButtonNotConnectedTooltip();
-            }
         }
 
         private void PopButtonNotConnectedTooltip()
         {
+            if (_buttonWarningDisabled)
+                return;
+
             notifyIcon1.BalloonTipTitle = "Button Not Connected";
-            notifyIcon1.BalloonTipText = "Click here to connect.";
+            notifyIcon1.BalloonTipText = "Right click and select Connect Button to connect.";
             notifyIcon1.BalloonTipIcon = ToolTipIcon.Warning;
+            // notifyIcon1.BalloonTipClicked += ConnectButtonMenuItem_Click;
 
             notifyIcon1.Visible = true;
             notifyIcon1.ShowBalloonTip((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
@@ -113,6 +116,11 @@ namespace Muffle
             notifyIcon1.Icon = Properties.Resources.microphone_green;
             LogMessage("Mic status: Not Muted");
             _muteButton.SetMuteStateFalse();
+
+            if (!_muteButton.IsConnected())
+            {
+                PopButtonNotConnectedTooltip();
+            }
         }
 
         private void CheckMuteStatusEventHandler(object sender, EventArgs e)
@@ -216,6 +224,17 @@ namespace Muffle
             {
                 CheckMuteStatus();
             }
+        }
+
+        private void IgnoreWarningsMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            var menuItem = (ToolStripMenuItem)sender;
+            _buttonWarningDisabled = menuItem.CheckState switch
+            {
+                CheckState.Checked => true,
+                CheckState.Unchecked => false,
+                CheckState.Indeterminate => throw new InvalidOperationException()
+            };
         }
     }
 }

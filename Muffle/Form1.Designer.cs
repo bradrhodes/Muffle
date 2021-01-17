@@ -38,6 +38,7 @@ namespace Muffle
             this.UnmuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ConnectButtonMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.IgnoreWarningsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.DebugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -83,60 +84,69 @@ namespace Muffle
             this.UnmuteMenuItem,
             this.toolStripSeparator1,
             this.ConnectButtonMenuItem,
+            this.IgnoreWarningsMenuItem,
             this.toolStripSeparator3,
             this.DebugMenuItem,
             this.toolStripSeparator2,
             this.ExitMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(159, 132);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(266, 154);
             // 
             // MuteMenuItem
             // 
             this.MuteMenuItem.Name = "MuteMenuItem";
-            this.MuteMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.MuteMenuItem.Size = new System.Drawing.Size(265, 22);
             this.MuteMenuItem.Text = "Mute";
             this.MuteMenuItem.Click += new System.EventHandler(this.MuteMenuItem_Click);
             // 
             // UnmuteMenuItem
             // 
             this.UnmuteMenuItem.Name = "UnmuteMenuItem";
-            this.UnmuteMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.UnmuteMenuItem.Size = new System.Drawing.Size(265, 22);
             this.UnmuteMenuItem.Text = "Unmute";
             this.UnmuteMenuItem.Click += new System.EventHandler(this.UnmuteMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(262, 6);
             // 
             // ConnectButtonMenuItem
             // 
             this.ConnectButtonMenuItem.Name = "ConnectButtonMenuItem";
-            this.ConnectButtonMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ConnectButtonMenuItem.Size = new System.Drawing.Size(265, 22);
             this.ConnectButtonMenuItem.Text = "Connect Button";
             this.ConnectButtonMenuItem.Click += new System.EventHandler(this.ConnectButtonMenuItem_Click);
+            // 
+            // IgnoreWarningsMenuItem
+            // 
+            this.IgnoreWarningsMenuItem.CheckOnClick = true;
+            this.IgnoreWarningsMenuItem.Name = "IgnoreWarningsMenuItem";
+            this.IgnoreWarningsMenuItem.Size = new System.Drawing.Size(265, 22);
+            this.IgnoreWarningsMenuItem.Text = "Ignore Button Connection Warnings";
+            this.IgnoreWarningsMenuItem.CheckStateChanged += new System.EventHandler(this.IgnoreWarningsMenuItem_CheckStateChanged);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(262, 6);
             // 
             // DebugMenuItem
             // 
             this.DebugMenuItem.Name = "DebugMenuItem";
-            this.DebugMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.DebugMenuItem.Size = new System.Drawing.Size(265, 22);
             this.DebugMenuItem.Text = "Debug";
             this.DebugMenuItem.Click += new System.EventHandler(this.DebugMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(262, 6);
             // 
             // ExitMenuItem
             // 
             this.ExitMenuItem.Name = "ExitMenuItem";
-            this.ExitMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.ExitMenuItem.Size = new System.Drawing.Size(265, 22);
             this.ExitMenuItem.Text = "Exit";
             this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             // 
@@ -208,6 +218,7 @@ namespace Muffle
         private System.Windows.Forms.ToolStripMenuItem ConnectButtonMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ToolStripMenuItem IgnoreWarningsMenuItem;
     }
 }
 
