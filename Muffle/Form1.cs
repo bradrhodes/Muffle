@@ -190,6 +190,10 @@ namespace Muffle
                     LogMessage($"Arduino port discovered: {connectButtonForm.PortName}");
 
                     // Save the port and make the connection
+                    var port = connectButtonForm.PortName;
+                    var baud = 9600;
+
+                    _settings.UpdateConnectionSettings(port, baud);
 
                     return;
                 }
