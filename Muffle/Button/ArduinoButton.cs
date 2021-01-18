@@ -30,7 +30,7 @@ namespace Muffle.Button
                 };
 
                 port.DataReceived += RecieveMessage;
-                port.Open();
+                //port.Open();
 
                 return port;
             });
