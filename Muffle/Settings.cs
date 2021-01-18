@@ -5,17 +5,10 @@ namespace Muffle
 {
     public record ArduinoSettings
     {
-        public Port Port { get; init; }
-
-        public ArduinoSettings(Port port) => (Port) = Port;
-    }
-
-    public record Port
-    {
         public string PortName { get; init; }
         public int BaudRate { get; init; }
 
-        public Port(string portName, int baudRate) => (PortName, BaudRate) = (portName, baudRate);
+        public ArduinoSettings(string portName, int baudRate) => (PortName, BaudRate) = (portName, baudRate);
     }
 
     public class Settings
@@ -32,11 +25,11 @@ namespace Muffle
             ArduinoSettings newSettings;
             if (ArduinoSettings == null)
             {
-                newSettings = new ArduinoSettings(new Port(portName, baud));
+                newSettings = new ArduinoSettings(portName, baud);
             }
             else
             {
-                newSettings = ArduinoSettings with { Port = ArduinoSettings.Port with { PortName = portName, BaudRate = baud} };
+                newSettings = ArduinoSettings with {PortName = portName, BaudRate = baud};
             }
             ArduinoSettings = newSettings;
             Save();

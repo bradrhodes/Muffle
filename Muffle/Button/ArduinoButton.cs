@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 
 namespace Muffle.Button
@@ -15,17 +16,17 @@ namespace Muffle.Button
         public ArduinoButton(ArduinoSettings settings)
         {
             this._settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            if (string.IsNullOrEmpty(settings.Port.PortName))
-                throw new ArgumentNullException(nameof(settings.Port.PortName));
-            if (settings.Port.BaudRate == default)
-                throw new ArgumentNullException(nameof(settings.Port.BaudRate));
+            if (string.IsNullOrEmpty(settings.PortName))
+                throw new ArgumentNullException(nameof(settings.PortName));
+            if (settings.BaudRate == default)
+                throw new ArgumentNullException(nameof(settings.BaudRate));
 
             _lazyPort = new Lazy<SerialPort>(() =>
             {
                 var port = new SerialPort
                 {
-                    PortName = settings.Port.PortName,
-                    BaudRate = settings.Port.BaudRate,
+                    PortName = settings.PortName,
+                    BaudRate = settings.BaudRate,
                 };
 
                 port.DataReceived += RecieveMessage;
@@ -71,7 +72,8 @@ namespace Muffle.Button
 
             try
             {
-                Port.WriteLine($"{message}#");
+                Debug.WriteLine($"{message}#");
+                Port.Write($"{message}#");
                 return new ArduinoResult.OkResult();
             }
             catch (Exception ex)
@@ -85,6 +87,8 @@ namespace Muffle.Button
             SerialPort sp = (SerialPort)sender;
             string s;
             s = sp.ReadLine();
+
+            s = s.TrimEnd('\r', '\n');
 
             OnProcessMessage(s);
         }

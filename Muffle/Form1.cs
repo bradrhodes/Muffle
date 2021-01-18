@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
@@ -191,7 +192,7 @@ namespace Muffle
 
                     // Save the port and make the connection
                     var port = connectButtonForm.PortName;
-                    var baud = 9600;
+                    var baud = 115200;
 
                     _settings.UpdateConnectionSettings(port, baud);
 
@@ -220,6 +221,7 @@ namespace Muffle
 
         private void ProcessMuteButtonMessages(string message)
         {
+            Debug.WriteLine($"Inbound: {message}");
             if(string.Equals(message, "togglemutestate"))
             {
                 ToggleMuteStatus();
