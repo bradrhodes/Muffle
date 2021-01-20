@@ -17,11 +17,13 @@ namespace Muffle
         private Settings _settings;
         private readonly MuteButtonFactory _muteButtonFactory;
         private MuteButton _muteButton;
+        private readonly AudioController _audioController;
 
         public Form1()
         {
             InitializeComponent();
             _muteButtonFactory = new MuteButtonFactory();
+            _audioController = new AudioController();
 
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = Muffle.Properties.Resources.microphone_black;
@@ -100,13 +102,14 @@ namespace Muffle
 
         private void ToggleMuteStatus()
         {
-            SetAudioDevice.RecordingMuteToggle();
+            // SetAudioDevice.RecordingMuteToggle();
+            _audioController.Toggle();
             CheckMuteStatus();
         }
 
         private void CheckMuteStatus()
         {
-            if (GetAudioDevice.GetRecordingMute())
+            if (_audioController.GetCurrentMuteState() is MuteResult.Muted)
             {
                 notifyIcon1.Icon = Properties.Resources.microphone_red;
                 LogMessage("Mic status: Muted");
@@ -149,13 +152,15 @@ namespace Muffle
 
         private void MuteMenuItem_Click(object sender, EventArgs e)
         {
-            SetAudioDevice.SetRecordingMute(true);
+            // SetAudioDevice.SetRecordingMute(true);
+            _audioController.MuteAllRecordingDevices();
             CheckMuteStatus();
         }
 
         private void UnmuteMenuItem_Click(object sender, EventArgs e)
         {
-            SetAudioDevice.SetRecordingMute(false);
+            // SetAudioDevice.SetRecordingMute(false);
+            _audioController.UnmuteAllRecordingDevices();
             CheckMuteStatus();
         }
 
@@ -168,7 +173,8 @@ namespace Muffle
 
         private void ExitMenuItem_Click(object sender, EventArgs e)
         {
-            SetAudioDevice.SetRecordingMute(false);
+            // SetAudioDevice.SetRecordingMute(false);
+            _audioController.UnmuteAllRecordingDevices();
             Application.Exit();
         }
 
