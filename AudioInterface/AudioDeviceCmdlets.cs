@@ -220,6 +220,7 @@ namespace AudioDeviceCmdlets
 
             for (int i = 0; i < DeviceCollection.Count; i++)
             {
+                var tempDevice = DeviceCollection[i];
                 // If this MMDevice's ID is the same as the ID of the MMDevice received by the InputObject parameter
                 if (DeviceCollection[i].ID == inputObject.ID)
                 {

@@ -18,12 +18,14 @@ namespace Muffle
         private readonly MuteButtonFactory _muteButtonFactory;
         private MuteButton _muteButton;
         private readonly AudioController _audioController;
+        private readonly MediaController _mediaController;
 
         public Form1()
         {
             InitializeComponent();
             _muteButtonFactory = new MuteButtonFactory();
             _audioController = new AudioController();
+            _mediaController = new MediaController();
 
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = Muffle.Properties.Resources.microphone_black;
@@ -104,6 +106,7 @@ namespace Muffle
         {
             // SetAudioDevice.RecordingMuteToggle();
             _audioController.Toggle();
+            // _mediaController.ToggleMute();
             CheckMuteStatus();
         }
 
@@ -154,6 +157,8 @@ namespace Muffle
         {
             // SetAudioDevice.SetRecordingMute(true);
             _audioController.MuteAllRecordingDevices();
+            // if (_mediaController.GetMuteState() is MuteResult.Unmuted)
+            //     _mediaController.ToggleMute();
             CheckMuteStatus();
         }
 
@@ -161,6 +166,8 @@ namespace Muffle
         {
             // SetAudioDevice.SetRecordingMute(false);
             _audioController.UnmuteAllRecordingDevices();
+            // if (_mediaController.GetMuteState() is MuteResult.Muted)
+            //     _mediaController.ToggleMute();
             CheckMuteStatus();
         }
 

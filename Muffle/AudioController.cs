@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using AudioDeviceCmdlets;
 using System.Linq;
 
@@ -44,6 +45,23 @@ namespace Muffle
 
             var recordingDevices = GetAudioDevice.List().Where(device =>
                 string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase));
+
+            var recordingDeviceIndexes = GetAudioDevice.List().Where(device =>
+                string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase)).Select(rd => rd.Index);
+
+
+            // foreach (var recordingDeviceIndex in recordingDeviceIndexes)
+            // {
+            //     SetAudioDevice.SetByIndex(recordingDeviceIndex);
+            //     try
+            //     {
+            //         SetAudioDevice.RecordingMuteToggle();
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         Debug.WriteLine($"Exception muting device: {ex.Message}");
+            //     }
+            // }
 
             foreach (var recordingDevice in recordingDevices)
             {
