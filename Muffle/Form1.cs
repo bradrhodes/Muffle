@@ -15,9 +15,6 @@ namespace Muffle
         private bool _allowVisible = false;
         private bool _buttonWarningDisabled = false;
 
-        private DeviceState _deviceState =
-            new(Enumerable.Empty<AudioDevice>(), Enumerable.Empty<AudioDevice>());
-
         private Settings _settings;
         private readonly MuteButtonFactory _muteButtonFactory;
         private MuteButton _muteButton;
@@ -106,9 +103,7 @@ namespace Muffle
 
         private void ToggleMuteStatus()
         {
-            // SetAudioDevice.RecordingMuteToggle();
-            _deviceState = _audioController.Toggle(_deviceState);
-            // _mediaController.ToggleMute();
+            _audioController.Toggle();
             CheckMuteStatus();
         }
 
@@ -157,19 +152,13 @@ namespace Muffle
 
         private void MuteMenuItem_Click(object sender, EventArgs e)
         {
-            // SetAudioDevice.SetRecordingMute(true);
-            _deviceState = _audioController.MuteAllRecordingDevices(_deviceState);
-            // if (_mediaController.GetMuteState() is MuteResult.Unmuted)
-            //     _mediaController.ToggleMute();
+            _audioController.MuteAllRecordingDevices();
             CheckMuteStatus();
         }
 
         private void UnmuteMenuItem_Click(object sender, EventArgs e)
         {
-            // SetAudioDevice.SetRecordingMute(false);
-            _deviceState = _audioController.UnmuteAllRecordingDevices(_deviceState);
-            // if (_mediaController.GetMuteState() is MuteResult.Muted)
-            //     _mediaController.ToggleMute();
+            _audioController.UnmuteAllRecordingDevices();
             CheckMuteStatus();
         }
 
@@ -182,8 +171,7 @@ namespace Muffle
 
         private void ExitMenuItem_Click(object sender, EventArgs e)
         {
-            // SetAudioDevice.SetRecordingMute(false);
-            _deviceState = _audioController.UnmuteAllRecordingDevices(_deviceState);
+            _audioController.UnmuteAllRecordingDevices();
             Application.Exit();
         }
 
