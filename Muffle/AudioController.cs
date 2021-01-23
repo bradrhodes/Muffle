@@ -1,54 +1,55 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using AudioDeviceCmdlets;
 using System.Linq;
+using System.Threading;
 
 namespace Muffle
 {
     public class AudioController
     {
-        public MuteResult MuteAllRecordingDevices()
+        public DeviceState MuteAllRecordingDevices(DeviceState deviceState)
         {
-            var (devEnum, devices) = GetAudioDevice.GetDeviceCollection();
-
-            var recordingDevices = GetAudioDevice.List().Where(device =>
-                string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase));
-
-            foreach (var recordingDevice in recordingDevices)
+            return GetCurrentMuteState() switch
             {
-                var newObject = SetAudioDevice.SetByInputObject(recordingDevice);
-                newObject.Device.AudioEndpointVolume.Mute = true;
-            }
-
-            return new MuteResult.Muted();
+                MuteResult.Muted => deviceState,
+                MuteResult.Unmuted => Toggle(deviceState),
+                _  => throw new UnknownPatternTypeException("Unknown MuteResult type")
+            };
         }
 
-        public MuteResult UnmuteAllRecordingDevices()
+        public DeviceState UnmuteAllRecordingDevices(DeviceState deviceState)
         {
-            var (devEnum, devices) = GetAudioDevice.GetDeviceCollection();
-
-            var recordingDevices = GetAudioDevice.List().Where(device =>
-                string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase));
-
-            foreach (var recordingDevice in recordingDevices)
+            return GetCurrentMuteState() switch
             {
-                recordingDevice.Device.AudioEndpointVolume.Mute = false;
-            }
-
-            return new MuteResult.Muted();
+                MuteResult.Muted => Toggle(deviceState),
+                MuteResult.Unmuted => deviceState,
+                _  => throw new UnknownPatternTypeException("Unknown MuteResult type")
+            };
         }
 
-        public MuteResult Toggle()
+        public DeviceState Toggle(DeviceState deviceState)
         {
+            var checkForUnmutableDevices = false;
             var muteState = !GetAudioDevice.GetRecordingMute();
-            var (devEnum, devices) = GetAudioDevice.GetDeviceCollection();
+            var unmutableDevices = Enumerable.Empty<AudioDevice>();
 
             var recordingDevices = GetAudioDevice.List().Where(device =>
-                string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase));
+                string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase)).ToArray();
 
-            var recordingDeviceIndexes = GetAudioDevice.List().Where(device =>
-                string.Equals(device.Type, "Recording", StringComparison.InvariantCultureIgnoreCase)).Select(rd => rd.Index);
+            if (recordingDevices.Except(deviceState.CurrentDevices).Any())
+                checkForUnmutableDevices = true;
 
+            SetMuteStateForAllDevices(recordingDevices, muteState);
+
+            if (checkForUnmutableDevices)
+            {
+                unmutableDevices = CheckForUnmutableDevices(recordingDevices);
+                // I'm not sure if this is needed if I'm not setting the device as active before muting
+            }
 
             // foreach (var recordingDeviceIndex in recordingDeviceIndexes)
             // {
@@ -63,17 +64,28 @@ namespace Muffle
             //     }
             // }
 
-            foreach (var recordingDevice in recordingDevices)
-            {
-                var setRecordingDevice = SetAudioDevice.SetByInputObject(recordingDevice);
-                setRecordingDevice.Device.AudioEndpointVolume.Mute = muteState;
-            }
+            // foreach (var recordingDevice in recordingDevices)
+            // {
+            //     var setRecordingDevice = SetAudioDevice.SetByInputObject(recordingDevice);
+            //     setRecordingDevice.Device.AudioEndpointVolume.Mute = muteState;
+            // }
 
-            return muteState switch
+            return new DeviceState(recordingDevices, unmutableDevices);
+
+        }
+
+        private IEnumerable<AudioDevice> CheckForUnmutableDevices(IEnumerable<AudioDevice> devices)
+        {
+            Thread.Sleep(501);
+            return devices.Where(audioDevice => !audioDevice.Device.AudioEndpointVolume.Mute);
+        }
+
+        private void SetMuteStateForAllDevices(IEnumerable<AudioDevice> devices, bool muteState)
+        {
+            foreach (var audioDevice in devices)
             {
-                true => new MuteResult.Muted(),
-                false => new MuteResult.Unmuted()
-            };
+                audioDevice.Device.AudioEndpointVolume.Mute = muteState;
+            }
         }
 
         public MuteResult GetCurrentMuteState()
@@ -84,6 +96,7 @@ namespace Muffle
                 false => new MuteResult.Unmuted()
             };
         }
+
     }
 
     public abstract class MuteResult
@@ -91,5 +104,25 @@ namespace Muffle
         public class Muted : MuteResult { }
 
         public class Unmuted : MuteResult { }
+    }
+
+    public class DeviceState
+    {
+        public IEnumerable<AudioDevice> UnmutableDevices { get; }
+        public IEnumerable<AudioDevice> CurrentDevices { get; }
+
+        public DeviceState(IEnumerable<AudioDevice> currentDevices, IEnumerable<AudioDevice> unmutableDevices)
+        {
+            CurrentDevices = currentDevices;
+            UnmutableDevices = unmutableDevices;
+        }
+    }
+
+    public class UnknownPatternTypeException : Exception
+    {
+        public UnknownPatternTypeException(string message) : base(message)
+        {
+            
+        }
     }
 }

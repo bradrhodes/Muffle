@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
 using Muffle.Button;
@@ -14,18 +15,19 @@ namespace Muffle
         private bool _allowVisible = false;
         private bool _buttonWarningDisabled = false;
 
+        private DeviceState _deviceState =
+            new(Enumerable.Empty<AudioDevice>(), Enumerable.Empty<AudioDevice>());
+
         private Settings _settings;
         private readonly MuteButtonFactory _muteButtonFactory;
         private MuteButton _muteButton;
         private readonly AudioController _audioController;
-        private readonly MediaController _mediaController;
 
         public Form1()
         {
             InitializeComponent();
             _muteButtonFactory = new MuteButtonFactory();
             _audioController = new AudioController();
-            _mediaController = new MediaController();
 
             this.Icon = Properties.Resources.microphone_black;
             notifyIcon1.Icon = Muffle.Properties.Resources.microphone_black;
@@ -105,7 +107,7 @@ namespace Muffle
         private void ToggleMuteStatus()
         {
             // SetAudioDevice.RecordingMuteToggle();
-            _audioController.Toggle();
+            _deviceState = _audioController.Toggle(_deviceState);
             // _mediaController.ToggleMute();
             CheckMuteStatus();
         }
@@ -156,7 +158,7 @@ namespace Muffle
         private void MuteMenuItem_Click(object sender, EventArgs e)
         {
             // SetAudioDevice.SetRecordingMute(true);
-            _audioController.MuteAllRecordingDevices();
+            _deviceState = _audioController.MuteAllRecordingDevices(_deviceState);
             // if (_mediaController.GetMuteState() is MuteResult.Unmuted)
             //     _mediaController.ToggleMute();
             CheckMuteStatus();
@@ -165,7 +167,7 @@ namespace Muffle
         private void UnmuteMenuItem_Click(object sender, EventArgs e)
         {
             // SetAudioDevice.SetRecordingMute(false);
-            _audioController.UnmuteAllRecordingDevices();
+            _deviceState = _audioController.UnmuteAllRecordingDevices(_deviceState);
             // if (_mediaController.GetMuteState() is MuteResult.Muted)
             //     _mediaController.ToggleMute();
             CheckMuteStatus();
@@ -181,7 +183,7 @@ namespace Muffle
         private void ExitMenuItem_Click(object sender, EventArgs e)
         {
             // SetAudioDevice.SetRecordingMute(false);
-            _audioController.UnmuteAllRecordingDevices();
+            _deviceState = _audioController.UnmuteAllRecordingDevices(_deviceState);
             Application.Exit();
         }
 
