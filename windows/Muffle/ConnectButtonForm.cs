@@ -17,6 +17,7 @@ namespace Muffle
         private IEnumerable<string> _initialComPorts = Enumerable.Empty<string>();
 
         public string PortName { get; private set; } = string.Empty;
+        public int BaudRate { get; private set; }
 
         public ConnectButtonForm()
         {
@@ -50,16 +51,18 @@ namespace Muffle
 
         private void buttonPair_Click(object sender, EventArgs e)
         {
+            buttonPair.Enabled = false;
 
             _initialComPorts = SerialPort.GetPortNames();
             label1.Text = "Please plug in the button now.";
+            BaudRate = int.Parse(baudSelector.SelectedText);
 
             _checkForAruino.Enabled = true;
         }
 
         private void ConnectButtonForm_Load(object sender, EventArgs e)
         {
-
+            baudSelector.SelectedIndex = 5;
         }
     }
 }

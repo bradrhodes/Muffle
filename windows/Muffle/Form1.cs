@@ -14,6 +14,7 @@ namespace Muffle
 
         private bool _allowVisible = false;
         private bool _buttonWarningDisabled = false;
+        private bool _previousButtonConnectedState = true;
 
         private Settings _settings;
         private readonly MuteButtonFactory _muteButtonFactory;
@@ -87,7 +88,8 @@ namespace Muffle
             // notifyIcon1.BalloonTipClicked += ConnectButtonMenuItem_Click;
 
             notifyIcon1.Visible = true;
-            notifyIcon1.ShowBalloonTip((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+            // notifyIcon1.ShowBalloonTip((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+            notifyIcon1.ShowBalloonTip(int.MaxValue);
         }
 
         private void InitializeButton()
@@ -121,10 +123,23 @@ namespace Muffle
             LogMessage("Mic status: Not Muted");
             _muteButton.SetMuteStateFalse();
 
-            if (!_muteButton.IsConnected())
+            CheckButtonConnectedState();
+        }
+
+        private void CheckButtonConnectedState()
+        {
+            var buttonConnected = _muteButton.IsConnected();
+
+            if (!buttonConnected && _previousButtonConnectedState)
             {
-                PopButtonNotConnectedTooltip();
+                _buttonWarningDisabled = false;
+                IgnoreWarningsMenuItem.CheckState = CheckState.Unchecked;
             }
+
+            _previousButtonConnectedState = buttonConnected;
+
+            if(!buttonConnected)
+                PopButtonNotConnectedTooltip();
         }
 
         private void CheckMuteStatusEventHandler(object sender, EventArgs e)
@@ -195,7 +210,7 @@ namespace Muffle
 
                     // Save the port and make the connection
                     var port = connectButtonForm.PortName;
-                    var baud = 115200;
+                    var baud = connectButtonForm.BaudRate;
 
                     _settings.UpdateConnectionSettings(port, baud);
 

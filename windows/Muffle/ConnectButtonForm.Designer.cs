@@ -31,6 +31,7 @@ namespace Muffle
         {
             this.label1 = new System.Windows.Forms.Label();
             this.buttonPair = new System.Windows.Forms.Button();
+            this.baudSelector = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -44,7 +45,7 @@ namespace Muffle
             // 
             // buttonPair
             // 
-            this.buttonPair.Location = new System.Drawing.Point(133, 43);
+            this.buttonPair.Location = new System.Drawing.Point(41, 41);
             this.buttonPair.Name = "buttonPair";
             this.buttonPair.Size = new System.Drawing.Size(86, 28);
             this.buttonPair.TabIndex = 1;
@@ -52,11 +53,34 @@ namespace Muffle
             this.buttonPair.UseVisualStyleBackColor = true;
             this.buttonPair.Click += new System.EventHandler(this.buttonPair_Click);
             // 
+            // baudSelector
+            // 
+            this.baudSelector.FormattingEnabled = true;
+            this.baudSelector.Items.AddRange(new object[] {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "14400",
+            "19200",
+            "28800",
+            "31250",
+            "38400",
+            "57600",
+            "115200"});
+            this.baudSelector.Location = new System.Drawing.Point(165, 45);
+            this.baudSelector.Name = "baudSelector";
+            this.baudSelector.Size = new System.Drawing.Size(166, 23);
+            this.baudSelector.TabIndex = 2;
+            // 
             // ConnectButtonForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 103);
+            this.Controls.Add(this.baudSelector);
             this.Controls.Add(this.buttonPair);
             this.Controls.Add(this.label1);
             this.MaximizeBox = false;
@@ -73,5 +97,6 @@ namespace Muffle
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonPair;
+        private System.Windows.Forms.ComboBox baudSelector;
     }
 }
