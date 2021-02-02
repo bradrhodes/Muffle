@@ -271,5 +271,14 @@ namespace Muffle
         {
 
         }
+
+        public void LogToListbox(string message)
+        {
+            if(listBox1.Items.Count > 40)
+                listBox1.Items.RemoveAt(0);
+
+            listBox1.Items.Add(message);
+            listBox1.TopIndex = listBox1.Items.Count - 1;
+        }
     }
 }
