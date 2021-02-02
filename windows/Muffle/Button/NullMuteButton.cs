@@ -13,5 +13,6 @@
         }
 
         public override bool IsConnected() => false;
+        public override ButtonStatus Status => new ButtonStatus("Null", "", "", false);
     }
 }

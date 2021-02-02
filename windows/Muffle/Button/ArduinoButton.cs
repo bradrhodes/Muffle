@@ -41,6 +41,8 @@ namespace Muffle.Button
             return Port.IsOpen;
         }
 
+        public override ButtonStatus Status => new ButtonStatus("Arduino", Port.PortName, Port.BaudRate, Port.IsOpen);
+
         public override ArduinoResult SetMuteStateTrue() =>
             ValidateConnection() switch
             {

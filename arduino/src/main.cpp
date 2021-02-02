@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Bounce2.h>
 #define onboardLed 13
+#define buttonLed 4
 
 // Setup buttons
 #define NUM_BUTTONS 1
@@ -33,10 +34,15 @@ void setup() {
 
   // Setup the LED
   pinMode(onboardLed, OUTPUT);
+  pinMode(buttonLed, OUTPUT);
   digitalWrite(onboardLed, ledState);
+  digitalWrite(buttonLed, ledState);
 
   // Setup the serial communication
-  Serial.begin(115200);
+  // Serial.begin(115200);
+  Serial.begin(57600);
+
+  Serial.println("Finished setup.");
 }
 
 void loop() {
@@ -47,6 +53,7 @@ void loop() {
   unsigned long currentMilliseconds = millis();
   if(currentMilliseconds - previousMilliseconds >= interval){
     previousMilliseconds = currentMilliseconds;
+
 
   // Check for events
     CheckForEvents();
@@ -61,6 +68,7 @@ void loop() {
     // If it fell, flag the need to toggle the LED
     if(buttons[i].fell())
     {
+      Serial.println("Button pressed");
       needToToggleMute = true;
     }
   }
@@ -68,6 +76,9 @@ void loop() {
   // if a LED toggle has been flagged
   if (needToToggleMute) 
   {
+    // Serial.print("needToToggleMute: ");
+    // Serial.println(needToToggleMute ? "true" : "false");
+    Serial.println("Toggling");
     ToggleMuteState();
   }
 }
@@ -121,6 +132,7 @@ void SetMuteState(bool state)
     ledState = LOW;
   }
   digitalWrite(onboardLed, ledState);
+  digitalWrite(buttonLed, ledState);
 } 
 
 void GetCurrentMuteState()
@@ -129,8 +141,8 @@ void GetCurrentMuteState()
 }
 void ToggleMuteState()
 {
-  //ledState = !ledState;
-  //SetMuteState(ledState);
+  // ledState = !ledState;
+  // SetMuteState(ledState);
   SendCommand("togglemutestate");
 }
 

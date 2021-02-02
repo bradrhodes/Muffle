@@ -214,6 +214,12 @@ namespace Muffle
 
                     _settings.UpdateConnectionSettings(port, baud);
 
+                    LogMessage($"Button settings updated: {_settings.ArduinoSettings.PortName}, {_settings.ArduinoSettings.BaudRate}");
+
+                    LogMessage($"Reinitializing button.");
+                    InitializeButton();
+                    LogMessage("Button reinitialized.");
+
                     return;
                 }
 
@@ -259,6 +265,11 @@ namespace Muffle
                 CheckState.Unchecked => false,
                 CheckState.Indeterminate => throw new InvalidOperationException()
             };
+        }
+
+        private void GetMuteButtonStatus_button_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

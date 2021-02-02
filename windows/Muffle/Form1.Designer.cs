@@ -47,6 +47,7 @@ namespace Muffle
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.GetMuteButtonStatus_button = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -179,11 +180,22 @@ namespace Muffle
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // GetMuteButtonStatus_button
+            // 
+            this.GetMuteButtonStatus_button.Location = new System.Drawing.Point(100, 131);
+            this.GetMuteButtonStatus_button.Name = "GetMuteButtonStatus_button";
+            this.GetMuteButtonStatus_button.Size = new System.Drawing.Size(132, 23);
+            this.GetMuteButtonStatus_button.TabIndex = 6;
+            this.GetMuteButtonStatus_button.Text = "Get Mute Button Status";
+            this.GetMuteButtonStatus_button.UseVisualStyleBackColor = true;
+            this.GetMuteButtonStatus_button.Click += new System.EventHandler(this.GetMuteButtonStatus_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.GetMuteButtonStatus_button);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.listBox1);
@@ -219,6 +231,7 @@ namespace Muffle
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolStripMenuItem IgnoreWarningsMenuItem;
+        private System.Windows.Forms.Button GetMuteButtonStatus_button;
     }
 }
 
