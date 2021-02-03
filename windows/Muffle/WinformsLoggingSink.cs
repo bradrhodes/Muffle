@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
@@ -12,28 +13,26 @@ namespace Muffle
 {
     public class WinformsLoggingSink : ILogEventSink
     {
-        private readonly LoggingPassthroughMethod _loggingPassthroughMethod;
+        private readonly IBindLogData _logDataBinder;
 
-        public WinformsLoggingSink(LoggingPassthroughMethod loggingPassthroughMethod)
+        public WinformsLoggingSink(IBindLogData logDataBinder)
         {
-            _loggingPassthroughMethod = loggingPassthroughMethod;
+            _logDataBinder = logDataBinder;
         }
         public void Emit(LogEvent logEvent)
         {
             var message = logEvent.RenderMessage();
-            _loggingPassthroughMethod(message);
+            _logDataBinder.Source.Add(message);
         }
     }
-
-    public delegate void LoggingPassthroughMethod(string message);
 
     public static class LoggingSinkExtensions
     {
         public static LoggerConfiguration WinformsLoggingSink(this LoggerSinkConfiguration loggerConfiguration,
-            LoggingPassthroughMethod passthrough,
+            IBindLogData logDataBinder,
             IFormatProvider formatProvider = null)
         {
-            return loggerConfiguration.Sink(new WinformsLoggingSink(passthrough));
+            return loggerConfiguration.Sink(new WinformsLoggingSink(logDataBinder));
         }
     }
 }

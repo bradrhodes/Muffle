@@ -1,16 +1,20 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using AudioDeviceCmdlets;
+using Microsoft.Extensions.Logging;
 using Muffle.Button;
 
 namespace Muffle
 {
     public partial class Form1 : Form
     {
+        private readonly ILogger<Form1> _logger;
 
         private bool _allowVisible = false;
         private bool _buttonWarningDisabled = false;
@@ -21,8 +25,14 @@ namespace Muffle
         private MuteButton _muteButton;
         private readonly AudioController _audioController;
 
-        public Form1()
+        private readonly BindingSource _bindingSource;
+
+        public Form1(ILogger<Form1> logger, IBindLogData logDataBinder)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _bindingSource = logDataBinder.Source;
+
             InitializeComponent();
             _muteButtonFactory = new MuteButtonFactory();
             _audioController = new AudioController();
@@ -37,6 +47,7 @@ namespace Muffle
             timer1.Interval = (int) TimeSpan.FromSeconds(5).TotalMilliseconds;
             timer1.Tick += CheckMuteStatusEventHandler;
             timer1.Enabled = true;
+
         }
 
 
@@ -44,6 +55,7 @@ namespace Muffle
         {
             // Hide();
 
+            listBox1.DataSource = _bindingSource;
         }
 
         protected override void SetVisibleCore(bool value)
@@ -111,6 +123,7 @@ namespace Muffle
 
         private void CheckMuteStatus()
         {
+            _logger.LogInformation("Checking mute status");
             if (_audioController.GetCurrentMuteState() is MuteResult.Muted)
             {
                 notifyIcon1.Icon = Properties.Resources.microphone_red;
@@ -149,11 +162,15 @@ namespace Muffle
 
         private void LogMessage(string message)
         {
-            if(listBox1.Items.Count > 40)
-                listBox1.Items.RemoveAt(0);
+            // _logMessages.Add(message);
+            // _bindingSource.Add(message);
+            _logger.LogInformation(message);
 
-            listBox1.Items.Add(message);
-            listBox1.TopIndex = listBox1.Items.Count - 1;
+            // if(listBox1.Items.Count > 40)
+            //     listBox1.Items.RemoveAt(0);
+            //
+            // listBox1.Items.Add(message);
+            // listBox1.TopIndex = listBox1.Items.Count - 1;
         }
 
         private void Form1_Resize(object sender, EventArgs e)
