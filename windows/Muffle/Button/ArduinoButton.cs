@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
+using Microsoft.Extensions.Logging;
 
 namespace Muffle.Button
 {
@@ -9,13 +10,16 @@ namespace Muffle.Button
     {
         private readonly Lazy<SerialPort> _lazyPort;
         private readonly ArduinoSettings _settings;
+        private readonly ILogger _logger;
 
         private SerialPort Port => _lazyPort.Value;
 
 
-        public ArduinoButton(ArduinoSettings settings)
+        public ArduinoButton(ArduinoSettings settings, ILogger logger)
         {
             this._settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
             if (string.IsNullOrEmpty(settings.PortName))
                 throw new ArgumentNullException(nameof(settings.PortName));
             if (settings.BaudRate == default)
@@ -74,7 +78,7 @@ namespace Muffle.Button
 
             try
             {
-                Debug.WriteLine($"{message}#");
+                _logger.LogInformation($"Send message to arduino: {message}");
                 Port.Write($"{message}#");
                 return new ArduinoResult.OkResult();
             }

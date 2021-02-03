@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Muffle
@@ -62,7 +57,7 @@ namespace Muffle
 
         private void ConnectButtonForm_Load(object sender, EventArgs e)
         {
-            baudSelector.SelectedIndex = 5;
+            baudSelector.SelectedIndex = 11;
         }
     }
 }

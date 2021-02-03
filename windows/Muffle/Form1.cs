@@ -14,7 +14,7 @@ namespace Muffle
 {
     public partial class Form1 : Form
     {
-        private readonly ILogger<Form1> _logger;
+        private readonly ILogger _logger;
 
         private bool _allowVisible = false;
         private bool _buttonWarningDisabled = false;
@@ -34,7 +34,7 @@ namespace Muffle
             _bindingSource = logDataBinder.Source;
 
             InitializeComponent();
-            _muteButtonFactory = new MuteButtonFactory();
+            _muteButtonFactory = new MuteButtonFactory(_logger);
             _audioController = new AudioController();
 
             this.Icon = Properties.Resources.microphone_black;
@@ -127,13 +127,13 @@ namespace Muffle
             if (_audioController.GetCurrentMuteState() is MuteResult.Muted)
             {
                 notifyIcon1.Icon = Properties.Resources.microphone_red;
-                LogMessage("Mic status: Muted");
+                _logger.LogInformation("Mic status: Muted");
                 _muteButton.SetMuteStateTrue();
                 return;
             }
 
             notifyIcon1.Icon = Properties.Resources.microphone_green;
-            LogMessage("Mic status: Not Muted");
+            _logger.LogInformation("Mic status: Not Muted");
             _muteButton.SetMuteStateFalse();
 
             CheckButtonConnectedState();
@@ -160,18 +160,6 @@ namespace Muffle
             CheckMuteStatus();
         }
 
-        private void LogMessage(string message)
-        {
-            // _logMessages.Add(message);
-            // _bindingSource.Add(message);
-            _logger.LogInformation(message);
-
-            // if(listBox1.Items.Count > 40)
-            //     listBox1.Items.RemoveAt(0);
-            //
-            // listBox1.Items.Add(message);
-            // listBox1.TopIndex = listBox1.Items.Count - 1;
-        }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -223,7 +211,7 @@ namespace Muffle
             {
                 if(connectButtonForm.ShowDialog() == DialogResult.OK)
                 {
-                    LogMessage($"Arduino port discovered: {connectButtonForm.PortName}");
+                    _logger.LogInformation($"Arduino port discovered: {connectButtonForm.PortName}");
 
                     // Save the port and make the connection
                     var port = connectButtonForm.PortName;
@@ -231,16 +219,16 @@ namespace Muffle
 
                     _settings.UpdateConnectionSettings(port, baud);
 
-                    LogMessage($"Button settings updated: {_settings.ArduinoSettings.PortName}, {_settings.ArduinoSettings.BaudRate}");
+                    _logger.LogInformation($"Button settings updated: {_settings.ArduinoSettings.PortName}, {_settings.ArduinoSettings.BaudRate}");
 
-                    LogMessage($"Reinitializing button.");
+                    _logger.LogInformation($"Reinitializing button.");
                     InitializeButton();
-                    LogMessage("Button reinitialized.");
+                    _logger.LogInformation("Button reinitialized.");
 
                     return;
                 }
 
-                LogMessage($"Arduino port not discovered.");
+                _logger.LogInformation($"Arduino port not discovered.");
             }
         }
 
@@ -262,7 +250,8 @@ namespace Muffle
 
         private void ProcessMuteButtonMessages(string message)
         {
-            Debug.WriteLine($"Inbound: {message}");
+            _logger.LogInformation($"Received from button: {message}");
+
             if(string.Equals(message, "togglemutestate"))
             {
                 ToggleMuteStatus();
@@ -287,15 +276,6 @@ namespace Muffle
         private void GetMuteButtonStatus_button_Click(object sender, EventArgs e)
         {
 
-        }
-
-        public void LogToListbox(string message)
-        {
-            if(listBox1.Items.Count > 40)
-                listBox1.Items.RemoveAt(0);
-
-            listBox1.Items.Add(message);
-            listBox1.TopIndex = listBox1.Items.Count - 1;
         }
     }
 }
