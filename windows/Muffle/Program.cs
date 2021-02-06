@@ -45,7 +45,7 @@ namespace Muffle
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine("Error occurred.");
+                    Console.WriteLine($"Error occurred: {ex.Message}");
                 }
             }
 

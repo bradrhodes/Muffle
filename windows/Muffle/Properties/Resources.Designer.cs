@@ -61,7 +61,7 @@ namespace Muffle.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Drawing.Icons similar to (Icons).
         /// </summary>
         internal static System.Drawing.Icon microphone_black {
             get {
@@ -71,7 +71,7 @@ namespace Muffle.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Drawing.Icons similar to (Icons).
         /// </summary>
         internal static System.Drawing.Icon microphone_green {
             get {
@@ -81,11 +81,21 @@ namespace Muffle.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Drawing.Icons similar to (Icons).
         /// </summary>
         internal static System.Drawing.Icon microphone_red {
             get {
                 object obj = ResourceManager.GetObject("microphone_red", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icons similar to (Icons).
+        /// </summary>
+        internal static System.Drawing.Icon microphone_yellow {
+            get {
+                object obj = ResourceManager.GetObject("microphone_yellow", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

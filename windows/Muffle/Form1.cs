@@ -26,12 +26,15 @@ namespace Muffle
         private readonly AudioController _audioController;
 
         private readonly BindingSource _bindingSource;
+        private readonly TrayIcon _trayIcon;
 
         public Form1(ILogger<Form1> logger, IBindLogData logDataBinder)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _bindingSource = logDataBinder.Source;
+
+            _trayIcon = new TrayIcon(this.SetIcon);
 
             InitializeComponent();
             _muteButtonFactory = new MuteButtonFactory(_logger);
@@ -102,6 +105,7 @@ namespace Muffle
             notifyIcon1.Visible = true;
             // notifyIcon1.ShowBalloonTip((int)TimeSpan.FromSeconds(10).TotalMilliseconds);
             notifyIcon1.ShowBalloonTip(int.MaxValue);
+            _buttonWarningDisabled = true;
         }
 
         private void InitializeButton()
@@ -123,23 +127,34 @@ namespace Muffle
 
         private void CheckMuteStatus()
         {
+            var buttonConnected = CheckButtonConnectedState();
+
             _logger.LogInformation("Checking mute status");
             if (_audioController.GetCurrentMuteState() is MuteResult.Muted)
             {
-                notifyIcon1.Icon = Properties.Resources.microphone_red;
+                // notifyIcon1.Icon = Properties.Resources.microphone_red;
+                if(buttonConnected)
+                    _trayIcon.SetMuted();
+                else
+                    _trayIcon.SetMutedWarning();
                 _logger.LogInformation("Mic status: Muted");
                 _muteButton.SetMuteStateTrue();
                 return;
             }
 
-            notifyIcon1.Icon = Properties.Resources.microphone_green;
+            // notifyIcon1.Icon = Properties.Resources.microphone_green;
+            if(buttonConnected)
+                _trayIcon.SetUnmuted();
+            else
+                _trayIcon.SetUnmutedWarning();
+
             _logger.LogInformation("Mic status: Not Muted");
             _muteButton.SetMuteStateFalse();
 
-            CheckButtonConnectedState();
         }
 
-        private void CheckButtonConnectedState()
+
+        private bool CheckButtonConnectedState()
         {
             var buttonConnected = _muteButton.IsConnected();
 
@@ -153,6 +168,8 @@ namespace Muffle
 
             if(!buttonConnected)
                 PopButtonNotConnectedTooltip();
+
+            return buttonConnected;
         }
 
         private void CheckMuteStatusEventHandler(object sender, EventArgs e)
@@ -269,13 +286,19 @@ namespace Muffle
             {
                 CheckState.Checked => true,
                 CheckState.Unchecked => false,
-                CheckState.Indeterminate => throw new InvalidOperationException()
+                CheckState.Indeterminate => throw new InvalidOperationException(),
+                _ => throw new InvalidOperationException()
             };
         }
 
         private void GetMuteButtonStatus_button_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void SetIcon(Icon icon)
+        {
+            notifyIcon1.Icon = icon;
         }
     }
 }

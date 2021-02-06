@@ -47,10 +47,11 @@ namespace Muffle
         private void buttonPair_Click(object sender, EventArgs e)
         {
             buttonPair.Enabled = false;
+            baudSelector.Enabled = false;
 
             _initialComPorts = SerialPort.GetPortNames();
             label1.Text = "Please plug in the button now.";
-            BaudRate = int.Parse(baudSelector.SelectedText);
+            BaudRate = int.Parse(baudSelector.SelectedItem.ToString());
 
             _checkForAruino.Enabled = true;
         }
