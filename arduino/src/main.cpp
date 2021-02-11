@@ -14,7 +14,7 @@ int ledState = LOW;
 char c;  // used to save incoming data
 String appendSerialData; // used to save data from c
 unsigned long previousMilliseconds = 0;
-const long interval = 500;
+const long interval = 40;
 
 // Function declarations
 void CheckForEvents();
@@ -68,7 +68,7 @@ void loop() {
     // If it fell, flag the need to toggle the LED
     if(buttons[i].fell())
     {
-      Serial.println("Button pressed");
+      // Serial.println("Button pressed");
       needToToggleMute = true;
     }
   }
@@ -78,7 +78,7 @@ void loop() {
   {
     // Serial.print("needToToggleMute: ");
     // Serial.println(needToToggleMute ? "true" : "false");
-    Serial.println("Toggling");
+    // Serial.println("Toggling");
     ToggleMuteState();
   }
 }
